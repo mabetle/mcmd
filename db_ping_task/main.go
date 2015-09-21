@@ -27,7 +27,7 @@ func PingDB(connURL string) {
 }
 
 func main() {
-	// connURL demo: root:xxx@tcp(db.mabetle.com:3306)/mysql
-	connURL := "root:en98as@tcp(db.mabetle.com:3306)/mysql"
+	// connURL demo: xxx:xxx@tcp(ip:3306)/xxx
+	connURL := ""
 	PingDB(connURL)
 }
