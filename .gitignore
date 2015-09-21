@@ -1,24 +1,31 @@
-# Compiled Object files, Static and Dynamic libs (Shared Objects)
-*.o
-*.a
-*.so
 
-# Folders
-_obj
-_test
+.git
 
-# Architecture specific extensions/prefixes
-*.[568vq]
-[568vq].out
+# Tags
+tag
+TAG
+tags
+TAGS
 
-*.cgo1.go
-*.cgo2.c
-_cgo_defun.c
-_cgo_gotypes.go
-_cgo_export.*
-
-_testmain.go
-
+# generate by go
 *.exe
-*.test
-*.prof
+tmp
+test-results
+.vendor
+*.log
+
+# Idea for go
+.idea
+
+# temp files
+\#*
+.#*
+*~
+
+# go main out
+**/*_demo/*_demo
+**/*_task/*_task
+**/*_main/*_main
+
+
+
