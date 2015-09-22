@@ -10,7 +10,7 @@ import (
 )
 
 func usage() {
-	fmt.Printf("Usage: prefix_task [add | remove] prefix [ext] \n")
+	fmt.Printf("Usage: finename_task [add | remove] prefix [ext] \n")
 }
 
 type FileNameWalkFunc func(fn string)
