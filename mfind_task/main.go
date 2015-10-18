@@ -6,14 +6,16 @@ import (
 	"flag"
 	"fmt"
 	"github.com/mabetle/mcore"
+	"github.com/mabetle/mcore/mcon"
 	"os"
 	"strings"
-	"github.com/mabetle/mcore/mcon"
 )
 
 var (
 	dir           string
 	exts          string
+	skipDirs      string
+	skipFiles     string
 	searchContent string
 	verbose       bool
 	recursive     bool
@@ -21,7 +23,7 @@ var (
 )
 
 func usage() {
-	fmt.Fprintf(os.Stderr, "Usage: %s [-d dir] [-e extends] [-V] [-r] content \n", os.Args[0])
+	fmt.Fprintf(os.Stderr, "Usage: %s [Flags] Search Content\n", os.Args[0])
 	flag.PrintDefaults()
 }
 
@@ -29,11 +31,15 @@ func DoFlag() {
 	wd, _ := os.Getwd()
 	flag.StringVar(&dir, "d", wd,
 		"Search dir")
-	flag.StringVar(&exts, "e", "go",
+	flag.StringVar(&exts, "e", "",
 		"File extends")
+	flag.StringVar(&skipDirs, "sd", "",
+		"Skip Dirs, separate by comma for skip dirs")
+	flag.StringVar(&skipFiles, "sf", "",
+		"Skip Files, separate by comma for skip files")
 	flag.BoolVar(&verbose, "V", false,
 		"Verbose")
-	flag.BoolVar(&recursive, "r", true,
+	flag.BoolVar(&recursive, "r", false,
 		"Recursive")
 	flag.BoolVar(&help, "h", false,
 		"Show help")
@@ -45,9 +51,12 @@ func DoFlag() {
 func ShowArgs() {
 	fmt.Println()
 	//show vars
-	fmt.Printf("Root dir      :%s\n", dir)
-	fmt.Printf("File extend   :%s\n", exts)
-	fmt.Printf("Search Content:%s\n", searchContent)
+	fmt.Printf("      Root Dir : %s\n", dir)
+	fmt.Printf("  File Extends : %s\n", exts)
+	fmt.Printf("     Skip Dirs : %s\n", skipDirs)
+	fmt.Printf("    Skip Files : %s\n", skipFiles)
+	fmt.Printf("     Recursive : %v\n", recursive)
+	fmt.Printf("Search Content : %s\n", searchContent)
 	fmt.Println()
 }
 
@@ -61,8 +70,8 @@ func main() {
 	}
 
 	// should tell me what to search
-	if flag.NArg() == 1 {
-		searchContent = flag.Args()[0]
+	if flag.NArg() > 1 {
+		searchContent = strings.Join(flag.Args(), " ")
 	}
 
 	// check searchContent
@@ -71,11 +80,11 @@ func main() {
 	}
 
 	ShowArgs()
-	Search(dir, exts, searchContent)
+	Search(dir, exts, recursive, skipDirs, skipFiles, searchContent)
 }
 
-func Search(path string, exts string, content string) {
-	files := mcore.GetSubFiles(path, true, exts)
+func Search(path string, exts string, recursive bool, skipDirs, skipFiles, content string) {
+	files := mcore.GetSubFiles(path, recursive, exts, skipDirs, skipFiles)
 	for _, item := range files {
 		text, err := mcore.ReadFileAll(item)
 		if nil != err {
@@ -102,11 +111,11 @@ func Search(path string, exts string, content string) {
 
 		for lineNum, line := range data {
 			if strings.Contains(line, content) {
-				fmt.Printf("%d ", lineNum)
-				lineA:=mcore.String(line).Split(content)
-				for i, v := range  lineA{
+				fmt.Printf("%d ", lineNum+1)
+				lineA := mcore.String(line).Split(content)
+				for i, v := range lineA {
 					fmt.Printf(v)
-					if i !=len(lineA)-1{
+					if i != len(lineA)-1 {
 						mcon.PrintGreen(content)
 					}
 				}
