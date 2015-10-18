@@ -70,7 +70,7 @@ func main() {
 	}
 
 	// should tell me what to search
-	if flag.NArg() > 1 {
+	if flag.NArg() > 0 {
 		searchContent = strings.Join(flag.Args(), " ")
 	}
 
