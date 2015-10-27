@@ -1,13 +1,33 @@
 package main
 
 import (
-	"mabetle/hub"
+	"mabetle/libs/hubs"
+	"fmt"
+	"os"
+	"flag"
 )
 
 var (
-	sql = hub.NewRootSql()
+	sql = hubs.GetRootSql()
+	dbname string
 )
 
+func doFlag(){
+	flag.Usage = func(){
+		fmt.Fprintf(os.Stderr, "Usage: %s dbname", os.Args[0])
+	}
+	flag.Parse()
+}
+
 func main() {
-	sql.CreateDatabase("demo")
+	doFlag()
+	
+	if flag.NArg() < 1 {
+		flag.Usage()
+		return
+	}
+
+	dbname = flag.Arg(0)
+
+	sql.CreateDatabase(dbname)
 }
