@@ -42,7 +42,7 @@ func DoFlag() {
 		"Skip Dirs, separate by comma for skip dirs")
 	flag.StringVar(&skipFiles, "sf", "",
 		"Skip Files, separate by comma for skip files")
-	flag.BoolVar(&recursive, "r", false,
+	flag.BoolVar(&recursive, "r", true,
 		"Recursive dir or not, default is true")
 	flag.BoolVar(&verbose, "V", false,
 		"Print more info what is app doing.")

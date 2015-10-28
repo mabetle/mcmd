@@ -1,5 +1,5 @@
 // gofind cmd
-// Usage: gofind --dir --ext searchContent
+// Usage: gofind [-d -e -r -c -sd -sf] searchContent
 package main
 
 import (
@@ -39,7 +39,7 @@ func DoFlag() {
 		"Skip Files, separate by comma for skip files")
 	flag.BoolVar(&verbose, "V", false,
 		"Verbose")
-	flag.BoolVar(&recursive, "r", false,
+	flag.BoolVar(&recursive, "r", true,
 		"Recursive")
 	flag.BoolVar(&help, "h", false,
 		"Show help")
