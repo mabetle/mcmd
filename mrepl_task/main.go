@@ -60,7 +60,7 @@ func ShowArgs() {
 	fmt.Println("      Skip Dirs :", skipDirs)
 	fmt.Println("     Skip Files :", skipFiles)
 	fmt.Println("        Verbose :", verbose)
-	fmt.Println("	   Recursive :", recursive)
+	fmt.Println("      Recursive :", recursive)
 	fmt.Println(" Search Content :", searchStr)
 	fmt.Println("Replace Content :", replaceStr)
 }
@@ -102,39 +102,45 @@ func main() {
 func replace() {
 	files := mcore.GetSubFiles(rootDir, recursive, exts, skipDirs, skipFiles)
 	fmt.Printf("Found %d files.\n", len(files))
-
 	for _, item := range files {
-		text, err := mcore.ReadFileAll(item)
-		if nil != err {
-			continue
+		if verbose {
+			show(item)
 		}
+		fileReplace(item, searchStr, replaceStr)
+	}
+}
 
-		if !strings.Contains(text, searchStr) {
-			if verbose {
-				//fmt.Printf("File: %s not found matches\n" , item )
-			}
-			continue
-		} else {
-			nums := strings.Count(text, searchStr)
-			fmt.Printf("File: %s found %d matches.\n", item, nums)
-			//do replace
-			text = strings.Replace(text, searchStr, replaceStr, -1)
-			mcore.WriteFile(item, text)
-			fmt.Println("Write file :", item)
-		}
+func fileReplace(item, searchStr, replaceStr string) {
+	text, err := mcore.ReadFileAll(item)
+	// cannot read file
+	if nil != err {
+		fmt.Printf("Read file error: %v\n", err)
+		return
+	}
+	if !strings.Contains(text, searchStr) {
+		return
+	}
+	nums := strings.Count(text, searchStr)
+	fmt.Printf("File: %s found %d matches.\n", item, nums)
+	//do replace
+	text = strings.Replace(text, searchStr, replaceStr, -1)
+	if _, err := mcore.WriteFile(item, text); err != nil {
+		fmt.Printf("Write file %s \n Error: %v", item, err)
+	} else {
+		fmt.Println("Write file :", item)
+	}
+}
 
-		//found
-		data, err := mcore.ReadFileLines(item)
-
-		if err != nil {
-			fmt.Println(err)
-			continue
-		}
-
-		for lineNum, line := range data {
-			if strings.Contains(line, searchStr) {
-				fmt.Printf("%d %s\n", lineNum, line)
-			}
+func show(item string) {
+	//found
+	data, err := mcore.ReadFileLines(item)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	for lineNum, line := range data {
+		if strings.Contains(line, searchStr) {
+			fmt.Printf("%d %s\n", lineNum, line)
 		}
 	}
 }
