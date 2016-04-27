@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"mabetle/libs/hubs"
 	"github.com/mabetle/mcore"
+	//"mabetle/libs/hubs"
 	"os"
 )
 
@@ -13,10 +13,10 @@ func MakeDir(dir string) {
 }
 
 func MakeOrgDir(path string) {
-	for k, v := range hub.OrgNames {
-		dir := fmt.Sprintf("%s/%d-%s", path, 100+k, v)
-		MakeDir(dir)
-	}
+	//for k, v := range hubs.OrgNames {
+	//dir := fmt.Sprintf("%s/%d-%s", path, 100+k, v)
+	//MakeDir(dir)
+	//}
 }
 
 //
